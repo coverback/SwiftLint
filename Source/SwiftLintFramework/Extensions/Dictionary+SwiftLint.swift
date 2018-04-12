@@ -72,10 +72,11 @@ extension Dictionary where Key: ExpressibleByStringLiteral {
         return (self["key.usr"] as? Int64).flatMap({ Int($0) })
     }
 
-    var enclosedSwiftAttributes: [String] {
+    var enclosedSwiftAttributes: [SwiftDeclarationAttributeKind] {
         let array = self["key.attributes"] as? [SourceKitRepresentable] ?? []
         let dictionaries = array.compactMap { ($0 as? [String: SourceKitRepresentable]) }
         return dictionaries.compactMap { $0["key.attribute"] as? String }
+                           .compactMap(SwiftDeclarationAttributeKind.init(rawValue:))
     }
 
     var substructure: [[String: SourceKitRepresentable]] {
